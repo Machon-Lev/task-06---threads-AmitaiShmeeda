@@ -1,0 +1,50 @@
+# CMake generated files
+CMakeFiles/
+CMakeCache.txt
+CMakeScripts/
+CMakeTmp/
+Makefile
+cmake_install.cmake
+install_manifest.txt
+
+# Output directory (you might have 'out/' or 'build/' depending on your configuration)
+build/
+out/
+
+# Visual Studio generated files
+.vs/
+*.vcxproj
+*.vcxproj.filters
+*.sln
+*.vcxproj.user
+*.vcxproj.user.*
+
+
+# Other build and IDE generated files (e.g., Xcode, Eclipse, etc.)
+*.o
+*.obj
+*.exe
+*.dll
+*.so
+*.dylib
+*.out
+*.app
+*.xcodeproj/
+*.xcworkspace/
+*.dSYM/
+*.ini
+*.iml
+*.ipr
+*.iws
+*.classpath
+*.project
+*.settings/
+*.sublime-project
+*.sublime-workspace
+*.suo
+*.user
+*.userprefs
+*.log
+*.DS_Store
+Thumbs.db
+Icon?
