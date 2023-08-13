@@ -1,3 +1,7 @@
+// This project was completed by Amitai Shmeeda in C++.
+// It includes implementations for the SafeQueue, Producer, and Consumer classes,
+// as well as the main program to coordinate their interactions.
+
 #include "../include/SafeQueue.h"
 #include "../include/Producer.h"
 #include "../include/Consumer.h"
