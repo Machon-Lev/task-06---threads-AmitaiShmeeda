@@ -1,28 +1,31 @@
 #include "../include/Consumer.h"
-#include "../include/Producer.h"
-#include "../include/Message.h"
 #include <iostream>
-#include <chrono>
 
+// Constructor for the Consumer class
+Consumer::Consumer(SafeQueue<Message>& queue, int numProducers)
+    : messageQueue(queue), numFinishedProducers(0), maxFinishedProducers(numProducers) {}
 
-Consumer::Consumer(int totalProducers) : finishedProducers(0), totalProducers(totalProducers) {}
-
+// The main execution function for the Consumer thread
 void Consumer::run() {
-    while (finishedProducers.load() < 2) {
-        // Simulate some work for the consumer (you can remove this in the actual implementation).
-        std::this_thread::sleep_for(std::chrono::milliseconds(100));
-    }
-}
+    // Continue processing messages until all producers have finished
+    while (numFinishedProducers < maxFinishedProducers) {
+        // Create a Message object to hold the popped message
+        Message message;
 
-void Consumer::receiveMessage(const Message& message) {
-    std::lock_guard<std::mutex> lock(coutMutex);
-    if (message.isLast()) {
-        finishedProducers.fetch_add(1);
-        if (finishedProducers.load() == totalProducers) {
-            std::cout << "Consumer finished" << std::endl;
+        // Try to pop a message from the queue
+        if (messageQueue.tryPop(message)) {
+            // Check if the popped message indicates that a producer has finished
+            if (message.isLast()) {
+                // Increment the count of finished producers
+                numFinishedProducers++;
+
+                // Print a message indicating that a producer has finished
+                std::cout << message.getThreadId() << " finished." << std::endl;
+            }
+            else {
+                // Print the thread ID and the sent value from the message
+                std::cout << message.getThreadId() << " sent: " << message.getValue() << std::endl;
+            }
         }
-    }
-    else {
-        std::cout << message.getThreadId() << " sent: " << message.getValue() << std::endl;
     }
 }

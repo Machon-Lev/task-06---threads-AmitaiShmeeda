@@ -1,25 +1,45 @@
-#include <iostream>
-#include <vector>
-#include <thread>
+#include "../include/SafeQueue.h"
 #include "../include/Producer.h"
 #include "../include/Consumer.h"
-#include "../include/Message.h"
+#include <thread>
+#include <vector>
 
 int main() {
-    int totalProducers = 2; // Total number of producers
-    Consumer consumer(totalProducers);
-    std::thread consumerThread(&Consumer::run, &consumer);
+    // Create a thread-safe queue to hold messages between producers and consumer
+    SafeQueue<Message> messageQueue;
 
+    // Number of producer threads
+    int numProducers = 2;
+
+    // Create a vector to hold producer threads
     std::vector<std::thread> producerThreads;
-    for (int i = 0; i < totalProducers; ++i) { // Create producers only once
-        Producer producer(i);
-        producerThreads.emplace_back(&Producer::run, &producer);
+
+    // Start producer threads
+    for (int i = 1; i <= numProducers; ++i) {
+        producerThreads.emplace_back([i, &messageQueue]() {
+            // Create a producer with the given thread ID and message queue
+            Producer producer(i, messageQueue);
+            // Run the producer
+            producer.run();
+            });
     }
 
+    // Create a consumer with the message queue and the total number of producers
+    Consumer consumer(messageQueue, numProducers);
+
+    // Create a thread to run the consumer
+    std::thread consumerThread([&consumer]() {
+        // Run the consumer
+        consumer.run();
+        });
+
+    // Wait for all producer threads to finish
     for (auto& thread : producerThreads) {
         thread.join();
     }
 
+    // Wait for the consumer thread to finish
     consumerThread.join();
+
     return 0;
 }

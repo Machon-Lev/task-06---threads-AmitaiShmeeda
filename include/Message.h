@@ -1,24 +1,29 @@
 #ifndef MESSAGE_H
 #define MESSAGE_H
 
-#pragma once
-
 #include <string>
 
 class Message {
 public:
-    Message(long long threadId, double value, bool last);
+    // Default constructor
+    Message();
 
-    long long getThreadId() const;
+    // Parameterized constructor
+    Message(int threadId, double value, bool isLast);
+
+    // Get the thread ID of the message
+    int getThreadId() const;
+
+    // Get the value of the message
     double getValue() const;
+
+    // Check if the message is the last one
     bool isLast() const;
 
-    std::string toString() const;
-
 private:
-    long long threadId;
-    double value;
-    bool last;
+    int threadId;  // Thread ID
+    double value;  // Value calculated by the producer
+    bool last;     // Flag indicating if this is the last message
 };
 
-#endif // MESSAGE_H
+#endif

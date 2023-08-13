@@ -1,25 +1,24 @@
 #include "../include/Message.h"
 
-Message::Message(long long threadId, double value, bool last)
-    : threadId(threadId), value(value), last(last) {}
+// Default constructor: Initializes a message with default values
+Message::Message()
+    : threadId(0), value(0.0), last(false) {}
 
-long long Message::getThreadId() const {
+// Parameterized constructor: Initializes a message with specified values
+Message::Message(int threadId, double value, bool isLast)
+    : threadId(threadId), value(value), last(isLast) {}
+
+// Get the thread ID of the message
+int Message::getThreadId() const {
     return threadId;
 }
 
+// Get the value of the message
 double Message::getValue() const {
     return value;
 }
 
+// Check if the message is the last one
 bool Message::isLast() const {
     return last;
-}
-
-std::string Message::toString() const {
-    if (last) {
-        return std::to_string(threadId) + " finished";
-    }
-    else {
-        return std::to_string(threadId) + " sent: " + std::to_string(value);
-    }
 }

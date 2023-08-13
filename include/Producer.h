@@ -1,21 +1,20 @@
 #ifndef PRODUCER_H
 #define PRODUCER_H
 
-#pragma once
-#include <vector>
-#include <thread>
+#include "SafeQueue.h"
 #include "Message.h"
-
 
 class Producer {
 public:
-    Producer(long long id);
+    // Constructor: Initializes a producer with a thread ID and message queue
+    Producer(int id, SafeQueue<Message>& queue);
 
+    // The main execution function for the Producer thread
     void run();
 
 private:
-    long long id;
-    std::vector<Message> generateMessages();
+    int threadId;                    // ID of the producer thread
+    SafeQueue<Message>& messageQueue; // Reference to the shared message queue
 };
 
-#endif // PRODUCER_H
+#endif 

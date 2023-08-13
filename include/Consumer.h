@@ -1,25 +1,21 @@
 #ifndef CONSUMER_H
 #define CONSUMER_H
 
-#pragma once
-#include <atomic>
-#include <vector>
-#include <thread>
-#include <mutex>
+#include "SafeQueue.h"
 #include "Message.h"
 
 class Consumer {
 public:
-    Consumer(int totalProducers);
+    // Constructor: Initializes Consumer with a message queue and the number of producers
+    Consumer(SafeQueue<Message>& queue, int numProducers);
 
+    // The main execution function for the Consumer thread
     void run();
-    void receiveMessage(const Message& message);
 
 private:
-    std::atomic<int> finishedProducers;
-    std::vector<std::thread> producerThreads;
-    std::mutex coutMutex;
-    int totalProducers;
+    SafeQueue<Message>& messageQueue;    // Reference to the shared message queue
+    int numFinishedProducers;            // Number of producers that have finished
+    int maxFinishedProducers;            // Total number of producers
 };
 
 #endif // CONSUMER_H
